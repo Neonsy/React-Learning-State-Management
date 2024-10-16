@@ -2,17 +2,18 @@ import { FiCheckSquare } from 'react-icons/fi';
 
 import TaskCard from './card';
 
-import type { TaskList } from '../../../types/taskList';
+import type { Task } from '../../../types/task';
+import type { Category } from '../../../types/task/category';
 
 type Props = {
-    type: 'to-do' | 'in-progress' | 'completed';
-    taskList: TaskList[];
+    type: Category;
+    taskList: Task[];
 };
 
 export default function TaskCategory({ taskList, type }: Props) {
     const { heading, bg } = {
-        'to-do': { heading: 'To Do', bg: 'bg-[#0284C7]' },
-        'in-progress': { heading: 'In Progress', bg: 'bg-[#2563EB]' },
+        todo: { heading: 'To Do', bg: 'bg-[#0284C7]' },
+        inProgress: { heading: 'In Progress', bg: 'bg-[#2563EB]' },
         completed: { heading: 'Completed', bg: 'bg-[#4F46E5]' },
     }[type];
 

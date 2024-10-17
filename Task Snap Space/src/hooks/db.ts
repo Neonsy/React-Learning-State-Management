@@ -4,8 +4,9 @@ import { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 
 import type { DNDType } from '@/types/dnd';
+import type { Task } from '@/types/task';
 
-export function useInitialData(): [DNDType[], React.Dispatch<React.SetStateAction<DNDType[]>>] {
+export function useInitialData(): [DNDType[], React.Dispatch<React.SetStateAction<DNDType[]>>, Task, React.Dispatch<React.SetStateAction<Task>>] {
     const [categories, setCategories] = useState<DNDType[]>([
         {
             id: 'todoContainer',
@@ -36,5 +37,7 @@ export function useInitialData(): [DNDType[], React.Dispatch<React.SetStateActio
         },
     ]);
 
-    return [categories, setCategories];
+    const [activeItem, setActiveItem] = useState<Task>({} as Task);
+
+    return [categories, setCategories, activeItem, setActiveItem];
 }

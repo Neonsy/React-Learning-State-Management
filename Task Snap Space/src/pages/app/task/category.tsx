@@ -4,9 +4,9 @@ import { FiCheckSquare } from 'react-icons/fi';
 
 import TaskCard from '@/pages/app/task/card';
 
-import type { Task } from '@/types/task';
 import type { Category } from '@/types/category';
-import type { UniqueIdentifier } from '@dnd-kit/core';
+import type { Task } from '@/types/task';
+import { useDroppable, type UniqueIdentifier } from '@dnd-kit/core';
 
 type Props = {
     id: UniqueIdentifier;
@@ -15,6 +15,8 @@ type Props = {
 };
 
 export default function TaskCategory({ id, type, taskList }: Props) {
+    const { setNodeRef } = useDroppable({ id, data: { type } });
+
     const { heading, bg } = {
         todo: { heading: 'To Do', bg: 'bg-[#0284C7]' },
         inProgress: { heading: 'In Progress', bg: 'bg-[#2563EB]' },
@@ -29,8 +31,8 @@ export default function TaskCategory({ id, type, taskList }: Props) {
                 <FiCheckSquare className='text-2xl' />
             </div>
 
-            <div className='bg-slate-100 flex flex-col gap-y-2.5 pb-12'>
-                <SortableContext items={taskList.map((i) => i.id)}>
+            <div ref={setNodeRef} className='bg-slate-100 flex flex-col gap-y-2.5 pb-56'>
+                <SortableContext id={String(id)} items={taskList.map((i) => i.id)}>
                     {taskList.map((task) => (
                         <TaskCard key={task.id} id={task.id} text={task.content} />
                     ))}

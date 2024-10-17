@@ -1,7 +1,6 @@
-import type { Category } from "@/types/task/category";
+import type { UniqueIdentifier } from '@dnd-kit/core';
 
 export type Task = {
-    id: number;
-    category: Category;
+    id: UniqueIdentifier;
     content: string;
 };

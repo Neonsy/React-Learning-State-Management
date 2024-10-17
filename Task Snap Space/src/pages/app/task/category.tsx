@@ -1,9 +1,9 @@
 import { FiCheckSquare } from 'react-icons/fi';
 
-import TaskCard from './card';
+import TaskCard from '@/pages/app/task/card';
 
-import type { Task } from '../../../types/task';
-import type { Category } from '../../../types/task/category';
+import type { Task } from '@/types/task';
+import type { Category } from '@/types/task/category';
 
 type Props = {
     type: Category;

@@ -1,4 +1,4 @@
-import type { Category } from "./category";
+import type { Category } from "@/types/task/category";
 
 export type Task = {
     id: number;

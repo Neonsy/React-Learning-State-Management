@@ -1,5 +1,5 @@
-import HeroSection from './sections/hero';
-import TechnologiesSection from './sections/technologies';
+import HeroSection from '@/pages/home/sections/hero';
+import TechnologiesSection from '@/pages/home/sections/technologies';
 
 export default function HomePage() {
     return (

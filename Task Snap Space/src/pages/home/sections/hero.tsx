@@ -1,7 +1,7 @@
 import { Link } from '@tanstack/react-router';
 
-import Image from '../../../components/image';
-import heroImage from '../../../assets/images/home/hero.webp';
+import Image from '@/components/image';
+import heroImage from '@/assets/images/home/hero.webp';
 
 export default function HeroSection() {
     return (

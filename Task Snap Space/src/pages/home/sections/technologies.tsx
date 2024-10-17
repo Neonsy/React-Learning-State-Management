@@ -1,4 +1,4 @@
-import GridCard from '../gridCard';
+import GridCard from '@/pages/home/gridCard';
 
 import { BiLogoTypescript } from 'react-icons/bi';
 import { FaReact } from 'react-icons/fa';

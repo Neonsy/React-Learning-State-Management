@@ -1,8 +1,8 @@
 import { useState } from 'react';
 
-import TaskCategory from '../task/category';
+import TaskCategory from '@/pages/app/task/category';
 
-import type { Task } from '../../../types/task';
+import type { Task } from '@/types/task';
 
 export default function Dashboard() {
     const defaultData: Task[] = [

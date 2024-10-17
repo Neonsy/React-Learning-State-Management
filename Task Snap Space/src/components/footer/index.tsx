@@ -1,8 +1,8 @@
-import { getYear } from '../../libs/utils/date';
+import { getYear } from '@/libs/utils/date';
 
 import { FaRegCopyright } from 'react-icons/fa';
 
-import Container from '../container';
+import Container from '@/components/container';
 
 export default function Footer() {
     return (

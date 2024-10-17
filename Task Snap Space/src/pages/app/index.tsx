@@ -1,5 +1,5 @@
-import Dashboard from "./sections/dashboard";
-import Form from "./sections/form";
+import Dashboard from "@/pages/app/sections/dashboard";
+import Form from "@/pages/app/sections/form";
 
 export default function App() {
     return (

@@ -5,7 +5,7 @@ import { FiCheckSquare } from 'react-icons/fi';
 import TaskCard from '@/pages/app/task/card';
 
 import type { Task } from '@/types/task';
-import type { Category } from '@/types/task/category';
+import type { Category } from '@/types/category';
 import type { UniqueIdentifier } from '@dnd-kit/core';
 
 type Props = {

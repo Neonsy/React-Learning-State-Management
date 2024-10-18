@@ -2,7 +2,6 @@ import {
     closestCorners,
     DndContext,
     DragEndEvent,
-    DragMoveEvent,
     DragOverEvent,
     DragOverlay,
     DragStartEvent,
@@ -38,8 +37,7 @@ export default function Dashboard() {
                     collisionDetection={closestCorners}
                     sensors={sensors}
                     onDragStart={handleDragStart}
-                    // onDragMove={handleDragMove}
-                    // onDragOver={handleDragOver}
+                    onDragOver={handleDragOver}
                     onDragEnd={handleDragEnd}>
                     {categories.map((category) => (
                         <TaskCategory key={category.id} id={category.id} type={category.type} taskList={category.taskList} />
@@ -72,12 +70,70 @@ export default function Dashboard() {
         setActiveItem(activeData.activeItem);
     }
 
-    function handleDragMove(e: DragMoveEvent) {
-        console.log('Drag Move', e);
-    }
-
     function handleDragOver(e: DragOverEvent) {
         const { active, over } = e;
+
+        const eventState = {
+            droppedOnSameItem: false,
+            activeIsAnItem: false,
+            overIsAnItem: false,
+            overIsAContainer: false,
+            dropTargetIsInSameContainer: false,
+        };
+
+        const activeData = {
+            activeContainer: '',
+            activeItemIndex: 0,
+            activeItemArray: [] as Task[],
+            activeItem: {} as Task,
+        };
+
+        const overData = {
+            overContainer: '',
+            overItemIndex: 0,
+            overItemArray: [] as Task[],
+            overItem: {} as Task,
+        };
+
+        eventState.droppedOnSameItem = active.id === over?.id;
+        eventState.activeIsAnItem = active.data.current?.type === 'task';
+        eventState.overIsAnItem = over?.data.current?.type === 'task';
+        eventState.overIsAContainer = !eventState.overIsAnItem && !!over?.data.current?.type;
+
+        eventState.dropTargetIsInSameContainer = eventState.overIsAnItem
+            ? String(active.data.current?.sortable.containerId).includes(String(over?.data.current?.sortable.containerId))
+            : String(active.data.current?.sortable.containerId).includes(String(over?.id));
+
+        activeData.activeContainer = active.data.current?.sortable.containerId;
+
+        activeData.activeItemIndex = active.data.current?.sortable.index;
+        activeData.activeItemArray = categories.find((c) => c.id === activeData.activeContainer)?.taskList as Task[];
+        activeData.activeItem = activeData.activeItemArray?.[activeData.activeItemIndex!];
+
+        overData.overContainer = !eventState.overIsAnItem ? over?.id : over?.data.current?.sortable.containerId;
+
+        if (eventState.overIsAnItem) {
+            overData.overItemIndex = over?.data.current?.sortable.index;
+            overData.overItemArray = categories.find((c) => c.id === overData.overContainer)?.taskList as Task[];
+            overData.overItem = overData.overItemArray?.[overData.overItemIndex!];
+        }
+
+        if (eventState.droppedOnSameItem) {
+            return;
+        }
+
+        if (!eventState.dropTargetIsInSameContainer) {
+            if (eventState.overIsAnItem) {
+                setCategories((prev) => {
+                    const activeItemArray = prev.find((c) => c.taskList === activeData.activeItemArray);
+                    const overItemArray = prev.find((c) => c.taskList === overData.overItemArray);
+                    activeItemArray?.taskList.splice(activeData.activeItemIndex!, 1);
+                    overItemArray?.taskList.splice(overData.overItemIndex!, 0, activeData.activeItem);
+                    return prev;
+                });
+            } else if (eventState.overIsAContainer) {
+            }
+        }
     }
 
     function handleDragEnd(e: DragEndEvent) {
@@ -141,6 +197,12 @@ export default function Dashboard() {
                 setCategories((prev) => {
                     const targetArray = categories.filter((c) => c.taskList === activeData.activeItemArray);
                     const newArray = arrayMove(targetArray[0].taskList, activeData.activeItemIndex, overData.overItemIndex);
+                    return prev.map((c) => (c.id === activeData.activeContainer ? { ...c, taskList: newArray } : c));
+                });
+            } else if (eventState.overIsAContainer) {
+                setCategories((prev) => {
+                    const targetArray = categories.filter((c) => c.taskList === activeData.activeItemArray);
+                    const newArray = arrayMove(targetArray[0].taskList, activeData.activeItemIndex, targetArray[0].taskList.length - 1);
                     return prev.map((c) => (c.id === activeData.activeContainer ? { ...c, taskList: newArray } : c));
                 });
             }

@@ -24,12 +24,13 @@ export default function TaskCard({ id, text, buttonPointer }: Props) {
     return (
         <div
             ref={setNodeRef}
-            {...attributes}
             style={style}
-            className='bg-slate-50 shadow-lg shadow-black/15 py-2 flex items-center gap-x-2 px-3 cursor-default'>
-            <IoCloseOutline className='w-7 h-7 cursor-pointer' />
+            className={`rounded-xl bg-slate-50 shadow-lg shadow-black/15 py-2 flex items-center gap-x-2 px-3 cursor-default ${isDragging ? 'border-4 border-blue-300 border-dashed' : ''}`}>
+            <button className='cursor-pointer'>
+                <IoCloseOutline className='w-7 h-7' />
+            </button>
             <p className='break-all flex-grow'>{text}</p>
-            <button className={buttonPointer ? buttonPointer : 'cursor-grab'} {...listeners}>
+            <button className={buttonPointer ? buttonPointer : 'cursor-grab'} {...attributes} {...listeners}>
                 <MdOutlineDragIndicator />
             </button>
         </div>

@@ -1,4 +1,4 @@
-import { SortableContext } from '@dnd-kit/sortable';
+import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
 import { FiCheckSquare } from 'react-icons/fi';
 
@@ -15,27 +15,32 @@ type Props = {
 };
 
 export default function TaskCategory({ id, type, taskList }: Props) {
-    const { setNodeRef } = useDroppable({ id, data: { type } });
+    const { setNodeRef, isOver } = useDroppable({ id, data: { type } });
 
     const { heading, bg } = {
-        todo: { heading: 'To Do', bg: 'bg-[#0284C7]' },
-        inProgress: { heading: 'In Progress', bg: 'bg-[#2563EB]' },
-        completed: { heading: 'Completed', bg: 'bg-[#4F46E5]' },
+        todo: { heading: 'To Do', bg: '#0284C7' },
+        inProgress: { heading: 'In Progress', bg: '#2563EB' },
+        completed: { heading: 'Completed', bg: '#4F46E5' },
     }[type];
+
+    const border = isOver ? `border-[${bg}] border-4 border-dashed` : 'border-4 border-transparent';
 
     return (
         <div>
-            <div
-                className={`flex justify-between items-center ${bg} text-white shadow-xl shadow-black/50 font-bold px-3 py-2 rounded-tl-xl rounded-tr-xl`}>
+            <div className={`flex justify-between items-center bg-[${bg}] text-white shadow-xl shadow-black/50 font-bold px-3 py-2 rounded-t-xl`}>
                 <h3>{heading}</h3>
                 <FiCheckSquare className='text-2xl' />
             </div>
 
-            <div ref={setNodeRef} className='bg-slate-100 flex flex-col gap-y-2.5 pb-56'>
-                <SortableContext id={String(id)} items={taskList.map((i) => i.id)}>
-                    {taskList.map((task) => (
-                        <TaskCard key={task.id} id={task.id} text={task.content} />
-                    ))}
+            <div
+                ref={setNodeRef}
+                className={`flex flex-col gap-y-2.5 rounded-b-xl p-3 min-h-16 ${border} ${isOver ? `bg-[${bg}] bg-opacity-50` : 'bg-slate-100'}`}>
+                <SortableContext id={String(id)} items={taskList.map((i) => i.id)} strategy={verticalListSortingStrategy}>
+                    {taskList.length === 0 ? (
+                        <p className={`text-center ${isOver ? 'text-white' : ''}`}>Add a task to this Category</p>
+                    ) : (
+                        taskList.map((task) => <TaskCard key={task.id} id={task.id} text={task.content} />)
+                    )}
                 </SortableContext>
             </div>
         </div>

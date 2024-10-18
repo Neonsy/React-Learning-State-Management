@@ -131,7 +131,14 @@ export default function Dashboard() {
                     overItemArray?.taskList.splice(overData.overItemIndex!, 0, activeData.activeItem);
                     return prev;
                 });
-            } else if (eventState.overIsAContainer) {
+            } else if (eventState.overIsAContainer && !eventState.droppedOnSameItem) {
+                setCategories((prev) => {
+                    const activeItemArray = prev.find((c) => c.taskList === activeData.activeItemArray);
+                    const overItemArray = prev.find((c) => overData.overContainer.includes(String(c.id)));
+                    activeItemArray?.taskList.splice(activeData.activeItemIndex!, 1);
+                    overItemArray?.taskList.push(activeData.activeItem);
+                    return prev;
+                });
             }
         }
     }
@@ -183,8 +190,6 @@ export default function Dashboard() {
             overData.overItemArray = categories.find((c) => c.id === overData.overContainer)?.taskList as Task[];
             overData.overItem = overData.overItemArray?.[overData.overItemIndex!];
         }
-
-        console.log(eventState, activeData, overData);
 
         setActiveItem({} as Task);
 

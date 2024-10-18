@@ -15,15 +15,13 @@ type Props = {
 };
 
 export default function TaskCategory({ id, type, taskList }: Props) {
-    const { setNodeRef, isOver } = useDroppable({ id, data: { type } });
+    const { setNodeRef } = useDroppable({ id, data: { type } });
 
     const { heading, bg } = {
         todo: { heading: 'To Do', bg: '#0284C7' },
         inProgress: { heading: 'In Progress', bg: '#2563EB' },
         completed: { heading: 'Completed', bg: '#4F46E5' },
     }[type];
-
-    const border = isOver ? `border-[${bg}] border-4 border-dashed` : 'border-4 border-transparent';
 
     return (
         <div>
@@ -32,12 +30,10 @@ export default function TaskCategory({ id, type, taskList }: Props) {
                 <FiCheckSquare className='text-2xl' />
             </div>
 
-            <div
-                ref={setNodeRef}
-                className={`flex flex-col gap-y-2.5 rounded-b-xl p-3 min-h-16 ${border} ${isOver ? `bg-[${bg}] bg-opacity-50` : 'bg-slate-100'}`}>
+            <div ref={setNodeRef} className='bg-slate-100 flex flex-col gap-y-2.5 rounded-b-xl p-3 min-h-16'>
                 <SortableContext id={String(id)} items={taskList.map((i) => i.id)} strategy={verticalListSortingStrategy}>
                     {taskList.length === 0 ? (
-                        <p className={`text-center ${isOver ? 'text-white' : ''}`}>Add a task to this Category</p>
+                        <p className='text-center'>Add a task to this Category</p>
                     ) : (
                         taskList.map((task) => <TaskCard key={task.id} id={task.id} text={task.content} />)
                     )}
